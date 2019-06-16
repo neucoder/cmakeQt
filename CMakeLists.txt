@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.10)
+cmake_minimum_required(VERSION 3.1)
 project(cmakeQt)
 
 set(CMAKE_CXX_STANDARD 11)
@@ -7,7 +7,7 @@ set(CMAKE_CXX_STANDARD 11)
 
 
 
-set (CMAKE_PREFIX_PATH "N:\\QT\\5.10.0\\mingw53_32\\")
+set (CMAKE_PREFIX_PATH "/home/ys/Qt-5.9.8")
 
 
 
@@ -32,7 +32,6 @@ set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 
 add_subdirectory(Exerc)
-
 aux_source_directory(. SRC)
 add_executable(main ${SRC})
 # Use the Widgets module from Qt 5

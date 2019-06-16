@@ -28,10 +28,9 @@ void Employee::Show()
 
 void testEmp()
 {
-    Employee emp;
+    Employee emp("joe", 40, "lib", "mike", 20);
     emp.Show();
-    emp.Register("joe", 30, 'f', "library", 2000);
-    emp.Show();
+
     cout << "base class getAge() return " << emp.getAge() << endl;
 }
 
@@ -193,6 +192,7 @@ void Account::setBalance(float balance)
 
 void testAcc()
 {
+
     Account my;
     char name[] = "Jack";
     my.Initial(10112, name, 600.0);
@@ -217,9 +217,40 @@ void testAcc()
     pb->setName(dname);
     pb->showMe();
 
+
 }
 
-void testQt()
+void testShape()
 {
+
+    Shape *p;
+    Rect R1(2, 1, 3.3, 2.0);
+    p = &R1;
+    cout << "矩形面积" << p->Area() << endl;
+    cout << "矩形周长" << p->Circumference() << endl;
+    p = new Circle(0, 0, 3.0);
+
+    cout << "圆的面积" << p->Area() << endl;
+    cout << "圆的周长" << p->Circumference() << endl;
+
+
+    /*
+    Shape *p, obj;
+    Line L1;
+    obj = L1;
+    obj.draw();
+    p = &L1;
+    p->draw();
+    Shape &p1 = L1;
+    p1.draw();
+
+    p = new Circle;
+    p->draw();
+     */
+}
+
+void testExer()
+{
+    testShape();
     cout << "test QT_Acc lib" << endl;
 }

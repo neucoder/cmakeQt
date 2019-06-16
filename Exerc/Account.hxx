@@ -11,16 +11,138 @@
 #include <cstring>
 #include <string>
 
-using namespace std;
+using std::cout;
+using std::endl;
+using std::string;
 
 void testBigInt();
 
-void testQt();
+void testExer();
 
 void testAcc();
 
 
+
+//类的多态性
+
+//多态性的两种形式，编译时多态，运行时多态
+//派生类对象转化为基类对象
+/*
+ * 1. 通过指针和引用调用虚函数，最好使用指针
+ *
+ * 2. 派生类中的重定义的基类虚函数仍是虚函数可以省略virtual关键字
+ * 3. 无虚构造函数，有虚析构函数
+ */
+
+
+
+/*
+ *
+ * 纯虚函数
+ * virtual 返回类型 函数名(参数表)=0;
+ *
+ * 至少包含一个纯虚函数的类称为抽象类
+ *
+ * */
+class Shape
+{
+public:
+    virtual float Area() = 0;
+    virtual float Circumference() = 0;
+
+    virtual void draw()
+    {
+        cout << "draw shape" << endl;
+    }
+};
+
+
+class Rect : public Shape
+{
+    float left, top;
+    float width, height;
+public:
+    Rect()
+    {
+        left = 0;
+        top = 0;
+        width = 0;
+        height = 0;
+    }
+
+    Rect(float x, float y, float w, float h)
+    {
+        left = x;
+        top = y;
+        width = w;
+        height = h;
+    }
+
+    virtual float Area()
+    {
+        return width * height;
+    }
+
+    float Circumference() override
+    {
+        return 2*(width+height);
+    }
+
+
+};
+
+
+class Line : public Shape
+{
+public:
+    virtual void draw()
+    {
+        cout << "draw a line" << endl;
+    }
+};
+
+
+class Circle : public Shape
+{
+private:
+    float xCenter, yCenter, radius;
+public:
+    Circle()
+    {
+        xCenter = 0;
+        yCenter = 0;
+        radius = 0;
+    }
+
+    Circle(float x, float y, float R)
+    {
+        xCenter = x;
+        yCenter = y;
+        radius = R;
+    }
+
+    virtual float Area()
+    {
+        return 3.1415 * radius * radius;
+    }
+
+    float Circumference() override
+    {
+        return 3.14159 * 2 * radius;
+    }
+
+    void draw()
+    {
+        cout << "draw a circle" << endl;
+    }
+};
+
+
+void testShape();
+
+
 void testEmp();
+
 //人员类
 class Person
 {
@@ -37,6 +159,19 @@ protected:
 
 public:
 
+    Person(string name, int age, int sex)
+    {
+        Name = name;
+        Age = age;
+        Sex = sex;
+        cout << "constructtor of person " << Name << endl;
+    }
+
+    ~Person()
+    {
+        cout << "deconstructot of person " << Name << endl;
+    }
+
     const string &getName() const
     {
         return Name;
@@ -49,7 +184,7 @@ public:
 
     char getSex() const
     {
-        return (Sex==0) ? 'm' : 'f';
+        return (Sex == 0) ? 'm' : 'f';
     }
 
 public:
@@ -63,16 +198,26 @@ public:
 class Employee : public Person
 {
     string Dept;
-    float Salary;
+    Person Wang;
+    float Salary = 0;
 
 public:
-    Employee()
+    Employee(string name, int age, string dept, string name1, int age1) :
+            Person(name, age, 1), Wang(name1, age1, 1)
     {
-        Register("XXX", 0, 'm', "XXX", 0);
+        Dept = dept;
+        cout << "construntor of Emlpoyee " << endl;
+
+    }
+
+    ~Employee()
+    {
+        cout << "deconstruntor of employee " << endl;
     }
 
 
     void Register(string name, int age, char sex, string dept, float salary);
+
     const string &getDept() const
     {
         return Dept;
