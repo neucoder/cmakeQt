@@ -6,9 +6,7 @@ set(CMAKE_CXX_STANDARD 11)
 
 
 
-
 set (CMAKE_PREFIX_PATH "/home/ys/Qt-5.9.8")
-
 
 
 
@@ -35,4 +33,5 @@ add_subdirectory(Exerc)
 aux_source_directory(. SRC)
 add_executable(main ${SRC})
 # Use the Widgets module from Qt 5
+
 target_link_libraries(main Qt5::Widgets Exer)

@@ -5,6 +5,7 @@
 #ifndef CMAKEQT_POINT_HXX
 #define CMAKEQT_POINT_HXX
 
+
 #include <string>
 
 using std::string;
