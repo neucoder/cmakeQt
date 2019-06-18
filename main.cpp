@@ -15,9 +15,10 @@ int main(int argc, char *argv[])
 
 
 
+
     QApplication a(argc, argv);
 
-    MainWindow w;
+    FileDialog w;
     cout << "hello" << endl;
     w.show();
     /*QWidget w;

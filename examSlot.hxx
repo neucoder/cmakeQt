@@ -29,6 +29,40 @@
 #include <QMenuBar>
 #include <QStatusBar>
 #include <QToolBar>
+#include "mydialog.h"
+#include <QFileDialog>
+#include <QColorDialog>
+#include <QDebug>
+#include <QFontDialog>
+//标准对话框
+
+class FileDialog : public QDialog
+{
+    Q_OBJECT
+private:
+    QLabel *label;
+    QPushButton *btn;
+    QPushButton *colorBtn;
+    QPushButton *fontBtn;
+    QPushButton *Message1;
+    QPushButton *Message2;
+    QPushButton *Message3;
+    QPushButton *Message4;
+    QPushButton *Message5;
+public:
+    FileDialog(QWidget *parent=0);
+    ~FileDialog(){}
+
+public slots:
+    void slotOpenFileDlg();
+    void slotColor();
+    void fontDlg();
+    void message1();
+    void message2();
+    void message3();
+    void message4();
+    void message5();
+};
 
 
 //菜单和工具栏
@@ -37,12 +71,14 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 private:
     QAction *openAction;
+    QAction *setAction;
 public:
     MainWindow(QWidget *parent=0);
     ~MainWindow(){}
 
 public slots:
     void open();
+    void setting();
 };
 
 
@@ -155,8 +191,10 @@ public slots:
     void setLabelText(int pos);
     void startProgress();
     void resetProcess();
+    void changeValue();
 
-
+signals:
+    void sentValue(QString str);
 public:
 
     Dialog(QWidget *parent=0);

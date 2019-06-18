@@ -4,7 +4,8 @@
 
 
 #include "examSlot.hxx"
-
+#include <string>
+using namespace std;
 
 
 void testSSlots()
@@ -21,7 +22,7 @@ Dialog::Dialog(QWidget *parent) : QDialog(parent)
 
     QIcon icon1("/home/ys/Pictures/play.ico");
 
-    label = new QLabel("label", this);
+    label = new QLabel("0", this);
     btn = new QPushButton("click",this);
     btn1 = new QPushButton("show", this);
     btn->setIcon(icon1);
@@ -99,7 +100,8 @@ Dialog::Dialog(QWidget *parent) : QDialog(parent)
 
     connect(btn, SIGNAL(clicked()), label, SLOT(close()));
     connect(comBox, SIGNAL(currentIndexChanged(int)), this, SLOT(onChanged(int)));
-    connect(btn1, SIGNAL(clicked()), label, SLOT(show()));
+    connect(btn1, SIGNAL(clicked()), this, SLOT(changeValue()));
+    connect(this, SIGNAL(sentValue(QString)), label, SLOT(setText(QString)));
 
 }
 
@@ -133,6 +135,13 @@ void Dialog::resetProcess()
     bar->setValue(0);
     QString str = "复制文件数目:0" ;
     fileNum->setText(str);
+}
+
+void Dialog::changeValue()
+{
+    count ++;
+    QString s = QString::number(count);
+    emit sentValue(QString(s));
 }
 
 
@@ -294,16 +303,27 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     setWindowTitle(tr("Main Window"));
     //定义action
     openAction = new QAction(tr("&open file"),this);
-    auto exitAction = new QAction(tr("&exit"),this);
+    auto exitAction = new QAction(tr("&dialog"),this);
     openAction->setShortcuts(QKeySequence::Open);
     openAction->setStatusTip(tr("Opening an existing file"));
     connect(openAction, &QAction::triggered, this, &MainWindow::open);
     connect(exitAction, &QAction::triggered, this, &MainWindow::close);
 
+
+    setAction = new QAction(tr("options..."), this);
+    setAction->setStatusTip(tr("environment setting"));
+
+    connect(setAction, &QAction::triggered, this, &MainWindow::setting);
+
+
+
+
+
+
     //添加菜单
     QMenu *file = menuBar()->addMenu(tr("&File"));
     file->addAction(openAction);
-    file->addAction(exitAction);
+    file->addAction(setAction);
 
 
     //添加工具栏
@@ -314,10 +334,124 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     //设置状态栏信息
     QStatusBar *status = statusBar();
     status->addAction(openAction);
+    status->addAction(setAction);
 
 }
 
 void MainWindow::open()
 {
     QMessageBox::information(this, tr("Information"),tr("Open"));
+}
+
+void MainWindow::setting()
+{
+    myDialog *dialog = new myDialog(this);
+    dialog->show();
+
+}
+
+FileDialog::FileDialog(QWidget *parent) : QDialog(parent)
+{
+    resize(400, 600);
+    btn = new QPushButton("File Dialog", this);
+    btn->setGeometry(20, 20, 100, 20);
+    label = new QLabel(this);
+    label->setText("file path");
+    label->setGeometry(20,50,300, 20);
+    connect(btn, SIGNAL(clicked()), this, SLOT(slotOpenFileDlg()));
+    colorBtn = new QPushButton("color select", this);
+    colorBtn->setGeometry(20, 80, 100, 20);
+    connect(colorBtn, SIGNAL(clicked()), this, SLOT(slotColor()));
+
+    fontBtn = new QPushButton("Font ",this);
+    fontBtn->setGeometry(20, 100, 100, 60);
+    connect(fontBtn, SIGNAL(clicked()), this, SLOT(fontDlg()));
+
+    Message1 = new QPushButton("info",this);
+    Message1->setGeometry(20, 180, 60, 20);
+    Message2 = new QPushButton("critical",this);
+    Message2->setGeometry(20, 200, 60, 20);
+    Message3 = new QPushButton("waring",this);
+    Message3->setGeometry(20, 220, 60, 20);
+    Message4 = new QPushButton("question",this);
+    Message4->setGeometry(20, 240, 60, 20);
+    Message5 = new QPushButton("about",this);
+    Message5->setGeometry(20, 260, 60, 20);
+
+    connect(Message1, SIGNAL(clicked()), this, SLOT(message1()));
+    connect(Message2, SIGNAL(clicked()), this, SLOT(message2()));
+    connect(Message3, SIGNAL(clicked()), this, SLOT(message3()));
+    connect(Message4, SIGNAL(clicked()), this, SLOT(message4()));
+    connect(Message5, SIGNAL(clicked()), this, SLOT(message5()));
+
+
+
+
+
+}
+
+void FileDialog::slotOpenFileDlg()
+{
+    QString s = QFileDialog::getOpenFileName(
+            this,
+            "open file dialog",
+            "/",
+            "C++ files(*.cpp);;C files(*.c);;Header files (*.h);;All files(*)"
+            );
+
+    label->setText(s);
+
+}
+
+void FileDialog::slotColor()
+{
+    QColor color = QColorDialog::getColor(Qt::blue);
+    if(color.isValid())
+    {
+        int r, g, b;
+        color.getRgb(&r, &g, &b);
+        qDebug() << "R:" << r << " B:" << g << " B:" << b;
+    }
+
+}
+
+void FileDialog::fontDlg()
+{
+    bool ok;
+    QFont font = QFontDialog::getFont(&ok);
+    if(ok)
+    {
+        fontBtn->setFont(font);
+    }
+
+}
+
+void FileDialog::message1()
+{
+    QMessageBox::information(NULL,"info", "Content", QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
+
+}
+
+void FileDialog::message2()
+{
+    QMessageBox::critical(NULL,"critical", "Content", QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
+
+}
+
+void FileDialog::message3()
+{
+    QMessageBox::warning(NULL,"warningl", "Content", QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
+
+}
+
+void FileDialog::message4()
+{
+    QMessageBox::question(NULL,"question", "Content", QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
+
+}
+
+void FileDialog::message5()
+{
+    QMessageBox::about(NULL,"about", "about this application");
+
 }
