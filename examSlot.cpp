@@ -2,9 +2,9 @@
 // Created by ys on 19-6-16.
 //
 
-#include <QtWidgets/QMessageBox>
+
 #include "examSlot.hxx"
-#include <QThread>
+
 
 
 void testSSlots()
@@ -188,4 +188,136 @@ QStackW::QStackW(QWidget *parent)
     resize(390,220);
     connect(leftlist, SIGNAL(currentRowChanged(int)), stack, SLOT(setCurrentIndex(int)));
 
+}
+
+TreeWidget::TreeWidget(QWidget *parent) : QDialog(parent)
+{
+    tree = new QTreeWidget(this);
+    //设置列数
+    tree->setColumnCount(1);
+    //设置标题头隐藏
+    tree->setHeaderHidden(true);
+
+    QTreeWidgetItem *Friend = new QTreeWidgetItem(tree, QStringList(QString("朋友")));
+    QTreeWidgetItem *frd = new QTreeWidgetItem(Friend);
+    frd->setText(0, "老张");
+
+
+    QTreeWidgetItem *ClassMate = new QTreeWidgetItem(tree, QStringList(QString("同学")));
+    QTreeWidgetItem *fly = new QTreeWidgetItem(QStringList(QString("fly")));
+    ClassMate->addChild(fly);
+
+    QTreeWidgetItem *Strange = new QTreeWidgetItem(tree);
+    Strange->setText(0, tr("陌生人"));
+    tree->addTopLevelItem(ClassMate);
+    tree->addTopLevelItem(Strange);
+    //展开qtree的所有节点
+    tree->expandAll();
+    //响应QtreeWidget节点上的双击事件
+
+    connect(tree, SIGNAL(itemDoubleClicked(QTreeWidgetItem*, int)), this, SLOT(item_Dblclicked(QTreeWidgetItem*, int)));
+    this->setWindowTitle("QtreeWidgetDemo");
+    this->resize(230, 200);
+    tree->resize(230, 200);
+
+
+
+
+}
+
+
+void TreeWidget::item_Dblclicked(QTreeWidgetItem *item, int column)
+{
+    QString str = item->text(column);
+    QMessageBox::warning(this, "响应双击事件", "你双击了\'"+str+"\'",
+            QMessageBox::Yes|QMessageBox::No,QMessageBox::Yes);
+}
+
+TableWidget::TableWidget(QWidget *parent) : QWidget(parent)
+{
+    auto *table = new QTableWidget(10, 5, this);
+    table->setWindowTitle("Qtable & item");
+    table->resize(350,200);
+    QStringList header;
+    header << "month" << "Name" << "Description";
+    table->setHorizontalHeaderLabels(header);
+    table->setItem(0,0,new QTableWidgetItem("jan"));
+    table->setItem(1,0,new QTableWidgetItem("feb"));
+    table->setItem(2,0,new QTableWidgetItem("mar"));
+
+    table->setItem(0,1,new QTableWidgetItem("file1"));
+    table->setItem(1,1,new QTableWidgetItem("file2"));
+    table->setItem(2,1,new QTableWidgetItem("file3"));
+
+    table->show();
+}
+
+RichText::RichText(QWidget *parent):QWidget(parent)
+{
+    colorBtn = new QPushButton("color", this);
+    fontBtn = new QPushButton("font", this);
+
+    edit = new QTextEdit(this);
+
+    colorBtn->setGeometry(30,30,80,30);
+    fontBtn->setGeometry(120,30,80,30);
+    edit->setGeometry(30,80,220,150);
+    connect(colorBtn, SIGNAL(clicked()), this, SLOT(clickedColorButton()));
+    connect(fontBtn, SIGNAL(clicked()), this, SLOT(clickedFontButton()));
+
+
+
+}
+
+void RichText::clickedColorButton()
+{
+    auto *colorDialog = new QColorDialog(this);
+    colorDialog->setCurrentColor(QColor(Qt::black));
+    if(QDialog::Accepted == colorDialog->exec())
+    {
+        edit->setTextColor(colorDialog->currentColor());
+    }
+}
+
+void RichText::clickedFontButton()
+{
+    auto *fontDialog = new QFontDialog(this);
+    fontDialog->setCurrentFont(edit->font());
+    if(QDialog::Accepted == fontDialog->exec())
+    {
+        edit->setCurrentFont(fontDialog->currentFont());
+    }
+}
+
+MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
+{
+    setWindowTitle(tr("Main Window"));
+    //定义action
+    openAction = new QAction(tr("&open file"),this);
+    auto exitAction = new QAction(tr("&exit"),this);
+    openAction->setShortcuts(QKeySequence::Open);
+    openAction->setStatusTip(tr("Opening an existing file"));
+    connect(openAction, &QAction::triggered, this, &MainWindow::open);
+    connect(exitAction, &QAction::triggered, this, &MainWindow::close);
+
+    //添加菜单
+    QMenu *file = menuBar()->addMenu(tr("&File"));
+    file->addAction(openAction);
+    file->addAction(exitAction);
+
+
+    //添加工具栏
+
+    QToolBar *toolBar = addToolBar(tr("&File"));
+    toolBar->addAction(openAction);
+
+    //设置状态栏信息
+    QStatusBar *status = statusBar();
+    status->addAction(openAction);
+
+}
+
+void MainWindow::open()
+{
+    QMessageBox::information(this, tr("Information"),tr("Open"));
 }

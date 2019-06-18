@@ -16,8 +16,86 @@
 #include <QTabWidget>
 #include <QLineEdit>
 #include <QStackedWidget>
-
+#include <QTreeWidget>
+#include <QTreeWidgetItem>
 #include <QListWidget>
+#include <QList>
+#include <QMessageBox>
+#include <QTableWidget>
+#include <QTextEdit>
+#include <QColorDialog>
+#include <QFontDialog>
+#include <QMainWindow>
+#include <QMenuBar>
+#include <QStatusBar>
+#include <QToolBar>
+
+
+//菜单和工具栏
+class MainWindow : public QMainWindow
+{
+    Q_OBJECT
+private:
+    QAction *openAction;
+public:
+    MainWindow(QWidget *parent=0);
+    ~MainWindow(){}
+
+public slots:
+    void open();
+};
+
+
+//富文本控件
+
+class RichText : public QWidget
+{
+    Q_OBJECT
+private:
+    QPushButton *colorBtn;
+    QPushButton *fontBtn;
+    QTextEdit *edit;
+
+public:
+    RichText(QWidget *parent=0);
+    ~RichText(){}
+
+public slots:
+    void clickedColorButton();
+    void clickedFontButton();
+
+
+};
+
+//表格控件
+
+class TableWidget : public  QWidget
+{
+public:
+    TableWidget(QWidget *parent=0);
+    ~TableWidget(){}
+};
+
+
+//树状控件
+
+class TreeWidget : public QDialog
+{
+    Q_OBJECT
+private:
+    QTreeWidget * tree;
+
+public:
+    TreeWidget(QWidget *parent=0);
+    ~TreeWidget(){};
+
+public slots:
+    void item_Dblclicked(QTreeWidgetItem *item, int column);
+
+};
+
+
+
 
 //层叠窗体
 class QStackW : public QDialog

@@ -17,7 +17,8 @@ int main(int argc, char *argv[])
 
     QApplication a(argc, argv);
 
-    QStackW w;
+    MainWindow w;
+    cout << "hello" << endl;
     w.show();
     /*QWidget w;
 
