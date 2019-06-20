@@ -455,3 +455,138 @@ void FileDialog::message5()
     QMessageBox::about(NULL,"about", "about this application");
 
 }
+
+void Draw::paintEvent(QPaintEvent *)
+{
+    QPainter painter(this);
+    painter.save();
+    QBrush brush(Qt::red);
+    painter.setBrush(brush);
+    painter.translate(100,100);
+    painter.drawRect(0,0,50,50);
+    painter.restore();
+    QPen pen;
+    pen.setWidth(5);
+    painter.setPen(pen);
+    painter.drawRect(10,10,50,50);
+
+
+    /*
+    painter.setPen(Qt::blue);
+    painter.setFont(QFont("Arial", 30));
+    painter.drawText(rect(), Qt::AlignCenter, "Qt");
+    painter.drawEllipse(QRect(0,0,width()-1,height()-1));
+     */
+}
+
+#define PI 3.1415926
+void Clock::CalcPosition()
+{
+    float secondHandLen, minuteHandLen, hourHandLen;
+    secondHandLen = radius * 0.8;
+    minuteHandLen = radius * 0.65;
+    hourHandLen   = radius * 0.5;
+    xSecond = xCenter + secondHandLen * cos(second * PI/30 - PI/2);
+    ySecond = yCenter + secondHandLen * sin(second * PI/30 - PI/2);
+
+    xMinute = xCenter + minuteHandLen * cos(minute * PI/30 - PI/2);
+    yMinute = yCenter + minuteHandLen * sin(minute * PI/30 - PI/2);
+
+    xHour = xCenter + hourHandLen * cos((hour + 1.0 * minute / 60) * PI/6 - PI/2);
+    yHour = yCenter + hourHandLen * sin((hour + 1.0 * minute / 60) * PI/6 - PI/2);
+}
+
+void Clock::paintEvent(QPaintEvent *)
+{
+    QPainter painter(this);
+    QPen pen;
+    painter.drawEllipse(QPointF(120.0,120.0),radius,radius);
+    painter.drawLine(xCenter, yCenter, xSecond, ySecond);
+    pen.setWidth(2);
+    painter.setPen(pen);
+    painter.drawLine(xCenter, yCenter, xMinute, yMinute);
+    pen.setWidth(4);
+    painter.setPen(pen);
+    painter.drawLine(xCenter, yCenter, xHour, yHour);
+
+
+}
+
+void Clock::timerEvent(QTimerEvent *event)
+{
+    QObject::timerEvent(event);
+    CalcPosition();
+    second++;
+    if(second==59)
+    {
+        second = 0;
+        minute++;
+    }
+
+    if(minute==59)
+    {
+        minute=0;
+        hour++;
+    }
+
+    if(hour==23)
+    {
+        hour = 0;
+    }
+
+    update();
+}
+
+Clock::Clock(QWidget *parent) : QWidget(parent)
+{
+    setWindowFlags(Qt::Window | Qt::FramelessWindowHint);
+    resize(300,400);
+    radius = 100;
+    xCenter = 120, yCenter = 120;
+    hour = 3;
+    minute = 56;
+    second = 55;
+    closeBtn = new QPushButton("close", this);
+    closeBtn->setGeometry(20, 300, 40, 20);
+    QString style = "QWidget{background:url(aa.png) rgba(255,255,255,0.3);background-repeat:none;opacity:0.5;}";
+    setStyleSheet(style);
+
+
+    connect(closeBtn, SIGNAL(clicked()), this, SLOT(close()));
+    CalcPosition();
+    startTimer(1000);
+}
+
+void Clock::mouseMoveEvent(QMouseEvent *e)
+{
+    QWidget::mouseMoveEvent(e);
+    if(isMouseDown)
+    {
+
+
+    }
+
+
+}
+
+void Clock::mouseReleaseEvent(QMouseEvent *e)
+{
+    QWidget::mouseReleaseEvent(e);
+
+    ds = e->pos() - mousePoint;
+    move(pos()+ds);
+    isMouseDown = false;
+}
+
+void Clock::mousePressEvent(QMouseEvent *e)
+{
+    QWidget::mousePressEvent(e);
+
+    if(e->button()==Qt::LeftButton)
+    {
+        isMouseDown = true;
+        mousePoint = e->pos();
+
+    }
+
+}

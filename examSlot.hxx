@@ -34,11 +34,57 @@
 #include <QColorDialog>
 #include <QDebug>
 #include <QFontDialog>
+#include <QPainter>
+#include <qmath.h>
+#include <QMouseEvent>
+#include <QPoint>
+
+
+
+class Clock : public QWidget
+{
+private:
+    float radius;
+    int xSecond, ySecond, xMinute, yMinute, xHour, yHour;
+    int xCenter, yCenter;
+    int second, minute, hour;
+    void CalcPosition();
+    QPushButton *closeBtn;
+    bool isMouseDown = false;
+    QPoint mousePoint, ds;
+
+
+protected:
+    void paintEvent(QPaintEvent *);
+    void timerEvent(QTimerEvent *event);
+    void mouseMoveEvent(QMouseEvent *e);
+    void mouseReleaseEvent(QMouseEvent *e);
+    void mousePressEvent(QMouseEvent *e);
+
+
+public:
+    Clock(QWidget *parent=0);
+
+};
+
+//二维绘图系统
+class Draw : public QWidget
+{
+
+protected:
+    void paintEvent(QPaintEvent *);
+
+public:
+
+};
+
+
+
 //标准对话框
 
 class FileDialog : public QDialog
 {
-    Q_OBJECT
+Q_OBJECT
 private:
     QLabel *label;
     QPushButton *btn;
@@ -50,17 +96,27 @@ private:
     QPushButton *Message4;
     QPushButton *Message5;
 public:
-    FileDialog(QWidget *parent=0);
-    ~FileDialog(){}
+    FileDialog(QWidget *parent = 0);
+
+    ~FileDialog()
+    {}
 
 public slots:
+
     void slotOpenFileDlg();
+
     void slotColor();
+
     void fontDlg();
+
     void message1();
+
     void message2();
+
     void message3();
+
     void message4();
+
     void message5();
 };
 
@@ -68,16 +124,20 @@ public slots:
 //菜单和工具栏
 class MainWindow : public QMainWindow
 {
-    Q_OBJECT
+Q_OBJECT
 private:
     QAction *openAction;
     QAction *setAction;
 public:
-    MainWindow(QWidget *parent=0);
-    ~MainWindow(){}
+    MainWindow(QWidget *parent = 0);
+
+    ~MainWindow()
+    {}
 
 public slots:
+
     void open();
+
     void setting();
 };
 
@@ -86,18 +146,22 @@ public slots:
 
 class RichText : public QWidget
 {
-    Q_OBJECT
+Q_OBJECT
 private:
     QPushButton *colorBtn;
     QPushButton *fontBtn;
     QTextEdit *edit;
 
 public:
-    RichText(QWidget *parent=0);
-    ~RichText(){}
+    RichText(QWidget *parent = 0);
+
+    ~RichText()
+    {}
 
 public slots:
+
     void clickedColorButton();
+
     void clickedFontButton();
 
 
@@ -105,11 +169,13 @@ public slots:
 
 //表格控件
 
-class TableWidget : public  QWidget
+class TableWidget : public QWidget
 {
 public:
-    TableWidget(QWidget *parent=0);
-    ~TableWidget(){}
+    TableWidget(QWidget *parent = 0);
+
+    ~TableWidget()
+    {}
 };
 
 
@@ -117,20 +183,21 @@ public:
 
 class TreeWidget : public QDialog
 {
-    Q_OBJECT
+Q_OBJECT
 private:
-    QTreeWidget * tree;
+    QTreeWidget *tree;
 
 public:
-    TreeWidget(QWidget *parent=0);
-    ~TreeWidget(){};
+    TreeWidget(QWidget *parent = 0);
+
+    ~TreeWidget()
+    {};
 
 public slots:
+
     void item_Dblclicked(QTreeWidgetItem *item, int column);
 
 };
-
-
 
 
 //层叠窗体
@@ -157,17 +224,18 @@ private:
 public slots:
 
 
-
 public:
 
-    QTab(QWidget *parent=0);
-    ~QTab(){};
+    QTab(QWidget *parent = 0);
+
+    ~QTab()
+    {};
 };
 
 
 class Dialog : public QDialog
 {
-    Q_OBJECT
+Q_OBJECT
 
 private:
     QLabel *label;
@@ -185,22 +253,30 @@ private:
     //抽屉效果
     QToolBox *toolBox;
 
-    int count=0;
+    int count = 0;
 public slots:
+
     void onChanged(int index);
+
     void setLabelText(int pos);
+
     void startProgress();
+
     void resetProcess();
+
     void changeValue();
 
 signals:
+
     void sentValue(QString str);
+
 public:
 
-    Dialog(QWidget *parent=0);
-    ~Dialog() { delete  label;};
-};
+    Dialog(QWidget *parent = 0);
 
+    ~Dialog()
+    { delete label; };
+};
 
 
 class ExamA : public QObject
@@ -238,12 +314,13 @@ Q_OBJECT
 
 public:
     ExamB()
-    { }
+    {}
 
 public slots:
+
     void Function(int value)
     {
-        std::cout << "new value = "  << value << std::endl;
+        std::cout << "new value = " << value << std::endl;
     };
 };
 
