@@ -14,14 +14,17 @@ using namespace std;
 #include <QDebug>
 #include <QFormLayout>
 #include "examSlot.hxx"
+#include "Flower.hxx"
+#include <time.h>
 
 int main(int argc, char *argv[])
 {
 
-
+    srand((unsigned)time(NULL));
     QApplication a(argc, argv);
 
-    Clock d;
+
+    FlowerFly d;
     d.show();
     /*
 

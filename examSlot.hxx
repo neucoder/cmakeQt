@@ -40,7 +40,6 @@
 #include <QPoint>
 
 
-
 class Clock : public QWidget
 {
 private:

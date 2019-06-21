@@ -500,14 +500,43 @@ void Clock::paintEvent(QPaintEvent *)
 {
     QPainter painter(this);
     QPen pen;
+    QPixmap pix, newimg;
+
+    //pix.load("flower.png");
+    //painter.drawPixmap(0,0,pix.width(), pix.height(), pix);
+
+
+//    for (int i = 0; i < 10; ++i)
+//    {
+//        int r = 10+rand() % 50;
+//        int x = rand() % 453;
+//        int y = rand() % 531;
+//        newimg = pix.scaled(r, r);
+//
+//        painter.drawPixmap(x, y, newimg.width(), newimg.height(), newimg);
+//
+//    }
+
+
+    pen.setWidth(4);
+    pen.setColor(Qt::blue);
+    painter.setPen(pen);
     painter.drawEllipse(QPointF(120.0,120.0),radius,radius);
+
+    pen.setColor(Qt::green);
+    painter.setPen(pen);
     painter.drawLine(xCenter, yCenter, xSecond, ySecond);
-    pen.setWidth(2);
+
+    pen.setWidth(6);
+    pen.setColor(Qt::yellow);
     painter.setPen(pen);
     painter.drawLine(xCenter, yCenter, xMinute, yMinute);
-    pen.setWidth(4);
+
+    pen.setWidth(8);
+    pen.setColor(Qt::red);
     painter.setPen(pen);
     painter.drawLine(xCenter, yCenter, xHour, yHour);
+
 
 
 }
@@ -539,20 +568,28 @@ void Clock::timerEvent(QTimerEvent *event)
 
 Clock::Clock(QWidget *parent) : QWidget(parent)
 {
-    setWindowFlags(Qt::Window | Qt::FramelessWindowHint);
-    resize(300,400);
+
+    setWindowFlags(Qt::Window | Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint);
+
+    setAttribute(Qt::WA_NoSystemBackground);
+    setAttribute(Qt::WA_TranslucentBackground);
+    //setAttribute(Qt::WA_PaintOnScreen);
+    //setAttribute(Qt::WA_TransparentForMouseEvents);
+
+
+    resize(453,531);
     radius = 100;
     xCenter = 120, yCenter = 120;
     hour = 3;
     minute = 56;
     second = 55;
     closeBtn = new QPushButton("close", this);
-    closeBtn->setGeometry(20, 300, 40, 20);
-    QString style = "QWidget{background:url(aa.png) rgba(255,255,255,0.3);background-repeat:none;opacity:0.5;}";
-    setStyleSheet(style);
+    closeBtn->setGeometry(400, 530, 40, 20);
+    //QString style = "background:url(quan.png);background-repeat:none;";
+   // setStyleSheet(style);
 
 
-    connect(closeBtn, SIGNAL(clicked()), this, SLOT(close()));
+
     CalcPosition();
     startTimer(1000);
 }
@@ -589,4 +626,10 @@ void Clock::mousePressEvent(QMouseEvent *e)
 
     }
 
+    if(e->button()==Qt::RightButton)
+    {
+        close();
+    }
+
 }
+

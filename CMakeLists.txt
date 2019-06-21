@@ -31,7 +31,9 @@ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 
 add_subdirectory(Exerc)
 aux_source_directory(. SRC)
-add_executable(main ${SRC})
+
+# add_executable(main ${SRC})
+add_executable(main WIN32 ${SRC})
 # Use the Widgets module from Qt 5
 
 target_link_libraries(main Qt5::Widgets Exer)
