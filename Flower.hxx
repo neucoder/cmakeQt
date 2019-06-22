@@ -73,6 +73,7 @@ public:
     int vx, vy;
     int pos;
     int trans;
+    bool draw;
 
 
     void init(int screenWidth, int screenHeight)
@@ -81,11 +82,25 @@ public:
         w = 10 + rand() % 50;
         h = w;
         x = rand() % screenWidth;
-        y = screenHeight + rand() % 20;
+        y = -w;
         vx = -1 + rand()%3;
-        vy = -3 + rand() %3;
-        pos = rand()%14;
-        trans = 5 + rand()%6;
+        vy = 3 + rand() %3;
+        pos = rand()%3;
+        trans = 2 + rand()%8;
+        draw = true;
+    }
+
+    void start(int screenWidth, int screenHeight)
+    {
+        w = 10 + rand() % 50;
+        h = w;
+        x = rand() % screenWidth;
+        y = rand() % screenHeight;
+        vx = -1 + rand()%3;
+        vy = 3 + rand() %3;
+        pos = rand()%3;
+        trans = 2 + rand()%8;
+        draw = false;
     }
 
 };
@@ -95,7 +110,7 @@ class FlowerFly : public QWidget
 {
 Q_OBJECT
 private:
-    Flower flower[100];
+    Flower flower[200];
     QPoint mousePoint, ds;
     int ScreenWidth, ScreenHeight;
     int angle;
@@ -104,8 +119,8 @@ private:
 protected:
     void paintEvent(QPaintEvent *);
     void timerEvent(QTimerEvent *event);
-    void mouseMoveEvent(QMouseEvent *e);
-    void mouseReleaseEvent(QMouseEvent *e);
+    //void mouseMoveEvent(QMouseEvent *e);
+    //void mouseReleaseEvent(QMouseEvent *e);
     void mousePressEvent(QMouseEvent *e);
 
 

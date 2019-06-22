@@ -18,23 +18,26 @@ void FlowerFly::paintEvent(QPaintEvent *)
 
 
 
-    for (int i = 0; i < 100; ++i)
+    for (int i = 0; i < 200; ++i)
     {
-        QString str = QString("img/flower%1.png").arg(flower[i].pos);
-        //qDebug() << str ;
-        pix.load(str);
-        newimg = pix.scaled(flower[i].w, flower[i].h);
-        painter.save();
+        if(flower[i].draw)
+        {
+            QString str = QString("img/flower%1.png").arg(flower[i].pos);
+            //qDebug() << str ;
+            pix.load(str);
+            newimg = pix.scaled(flower[i].w, flower[i].h);
+            painter.save();
 
-        int mx = newimg.width()/2;
-        int my = newimg.height()/2;
-        painter.setOpacity(1.0 * flower[i].trans/10);
-        painter.translate(flower[i].x+mx, flower[i].y+my);
-        painter.rotate(-angle);
-        painter.drawPixmap(0, 0, newimg.width(), newimg.height(), newimg);
-        //painter.drawPixmap(x() + flower[i].x, y() + flower[i].y, newimg.width(), newimg.height(), newimg);
+            int mx = newimg.width() / 2;
+            int my = newimg.height() / 2;
+            painter.setOpacity(1.0 * flower[i].trans / 10);
+            painter.translate(flower[i].x + mx, flower[i].y + my);
+            painter.rotate(angle);
+            painter.drawPixmap(0, 0, newimg.width(), newimg.height(), newimg);
+            //painter.drawPixmap(x() + flower[i].x, y() + flower[i].y, newimg.width(), newimg.height(), newimg);
 
-        painter.restore();
+            painter.restore();
+        }
     }
 
     //painter.drawRect(0,0,width()-1,height()-1);
@@ -49,23 +52,24 @@ void FlowerFly::timerEvent(QTimerEvent *event)
     }
     else
     {
-        angle+=1;
+        angle+=2;
     }
 
-    for (int i = 0; i < 100; ++i)
+    for (int i = 0; i < 200; ++i)
     {
         flower[i].x += flower[i].vx;
         flower[i].y += flower[i].vy;
-        if (flower[i].x < 0 || flower[i].y < 0 || flower[i].x > width())
+        if (flower[i].x < 0 -50- flower[i].w || flower[i].y > height() || flower[i].x > width())
         {
             flower[i].init(ScreenWidth, ScreenHeight);
         }
 
     }
-
+    //repaint();
     update();
 }
 
+/*
 void FlowerFly::mouseMoveEvent(QMouseEvent *e)
 {
     QWidget::mouseMoveEvent(e);
@@ -77,17 +81,11 @@ void FlowerFly::mouseReleaseEvent(QMouseEvent *e)
     ds = e->pos() - mousePoint;
     move(pos() + ds);
 }
-
+*/
 void FlowerFly::mousePressEvent(QMouseEvent *e)
 {
     QWidget::mousePressEvent(e);
 
-    if (e->button() == Qt::LeftButton)
-    {
-
-        mousePoint = e->pos();
-
-    }
 
     if (e->button() == Qt::RightButton)
     {
@@ -105,9 +103,9 @@ FlowerFly::FlowerFly(QWidget *parent) : QWidget(parent)
     ScreenWidth = rec.width();
     angle = 0;
 
-    for (int i = 0; i < 100; ++i)
+    for (int i = 0; i < 200; ++i)
     {
-        flower[i].init(ScreenWidth, ScreenHeight);
+        flower[i].start(ScreenWidth, ScreenHeight);
     }
 
 //    for (int i = 0; i < 10; ++i)
